@@ -9,9 +9,7 @@ async function main(url: string, stoppingAfterPages: number = 2) {
     let nextPageUrl: string | null = url;
     let pageCount: number = 0;
     let htmlContent: string = "";
-    let collectedAnalyticData: {} = {};
-    let ingestedData: {} = {};
-    let semiStructuredData: {}[] = [];
+    let collectedAnalyticData: Set<{}> = new Set();
 
     while (pageCount <= stoppingAfterPages) {
         pageCount++;
@@ -32,7 +30,7 @@ async function main(url: string, stoppingAfterPages: number = 2) {
         // start parsing
         // Collect all the links on page 1 
         const parsedContent: CheerioAPI = parseService.parseHtml(htmlContent);
-        collectedAnalyticData = await parseService.collectAnalyticData(url, parsedContent);
+        collectedAnalyticData = parseService.collectAnalyticData(url, parsedContent);
         nextPageUrl = parseService.getNextPageUrl(url);
         url = nextPageUrl || "";
     };
@@ -40,8 +38,8 @@ async function main(url: string, stoppingAfterPages: number = 2) {
     reports the same numbers, mostly from cache. */
     const stagetwoFinalReport: {} = {
         catalogue_pages: pageCount,
-        discovered: collectedAnalyticData,
-        unique_urls: collectedAnalyticData
+        discovered: collectedAnalyticData.size,
+        unique_urls: collectedAnalyticData.size
     };
     console.log(stagetwoFinalReport);
 };

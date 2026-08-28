@@ -1,51 +1,58 @@
 import * as cheerio from 'cheerio';
-import type { AnyNode, Document, Element, ParentNode } from 'domhandler';
+import type { AnyNode, Element } from 'domhandler';
 
 export class ParseRepository {
-    public pageLinkElements: Set<Element>;
+    public pageContentElements: Set<{}>;
+    private parsedPage: cheerio.CheerioAPI;
 
     constructor() {
-        this.pageLinkElements = new Set();
+        this.pageContentElements = new Set();
+        this.parsedPage = cheerio.load("");
     }
 
     /**
      * Parse the HTML content.
      */
-    public static parseHtml(html: string): cheerio.CheerioAPI {
-        return cheerio.load(html);
-    };
-
-    public getPageLinks(baseUrl: string, parsedContent: cheerio.CheerioAPI): Set<Element> {
-        parsedContent('a').each((i, el) => {
-            this.pageLinkElements.add(el);
-            // const link: string | undefined = el.attr('href') || '';
-        });
-        return this.pageLinkElements;
+    public parseHtml(html: string, parsedPage?: cheerio.CheerioAPI): cheerio.CheerioAPI {
+        this.parsedPage = parsedPage || cheerio.load(html);
+        return this.parsedPage;
     };
 
     /**
      * Get URLs of all resources.
      * @param baseUrl The base URL.
-     * @param linksSet The set of link elements.
+     * @param resourceSet The set of link elements.
      * @returns The set of resource URLs.
      */
-    public static getResourceUrls(baseUrl: string, linksSet: Set<Element>): Set<string> {
-        const resourceUrls: Set<string> = new Set();
-        linksSet.forEach((linkElement) => {
-            const firstChild: AnyNode | undefined = linkElement.childNodes[0];
-            if ((firstChild as Element).name === 'img') {
-                resourceUrls.add(new URL(linkElement.attribs['href'], baseUrl).href);
-            }
-        });
-        return resourceUrls;
+    public getResourceData(baseUrl: string, parsedContent: cheerio.CheerioAPI): Set<{}> {
+        const resourceElements = parsedContent('article.product_pod');
+        const h3ChildElements = parsedContent("h3");
+        const ratingElements = parsedContent("p.star-rating");
+        const priceElements = parsedContent("p.price_color");
+        const availability_textElements = parsedContent("p.instock.availability");
+        const descriptionElements = parsedContent("p.description");
+        for (let i = 0; i < resourceElements.length; i++) {
+            this.pageContentElements.add({
+                title: h3ChildElements.eq(i).children().first().attr('title') || null,
+                product_url: new URL((h3ChildElements.eq(i).children().first().attr('href') || ""), baseUrl).href,
+                rating_text: ratingElements.eq(i).attr('class')?.split(" ")?.[1] || null,
+                price_text: priceElements.eq(i).text() || null,
+                availability_text: availability_textElements.eq(i).text().trim() || null,
+                description: descriptionElements.eq(i).text() || null,
+                source_page: baseUrl,
+                fetched_at: new Date().toISOString()
+            });
+        }
+        return this.pageContentElements;
     };
 
     /**
      * Get the next page URL.
      */
-    public static getNextPageUrl(baseUrl: string, linksSet: Set<Element>): string | null {
+    public getNextPageUrl(baseUrl: string): string | null {
         let nextPageUrl: string | null = null;
-        linksSet.forEach((linkElement) => {
+        const linksSet: Set<Element> = new Set(this.parsedPage('a'));
+        linksSet.forEach((linkElement: Element) => {
             if ((linkElement.attribs['href'].includes('page-'))) { //  && linkElement.attribs['text'].includes('next')
                 nextPageUrl = new URL(linkElement.attribs['href'], baseUrl).href;
             }

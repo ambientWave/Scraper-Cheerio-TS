@@ -64,13 +64,6 @@ export class CacheRepository {
 
         // Write to disk
         await fs.writeFile(filePath, content, 'utf-8');
-
-        // Parse and cache in memory
-        const $ = ParseRepository.parseHtml(content);
-        this.cache.set(url, {
-            $,
-            lastAccessed: Date.now(),
-        });
         return;
     };
 
