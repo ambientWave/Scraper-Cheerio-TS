@@ -1,9 +1,5 @@
-import fs from 'fs/promises';
-import path from 'path';
-import process from 'process';
 import * as cheerio from 'cheerio';
 import { CacheRepository } from '../repositories/cache.repository';
-import type { CacheEntry } from '../dto/cache.dto';
 
 export class CacheService {
     private cacheRepository: CacheRepository;

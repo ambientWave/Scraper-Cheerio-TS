@@ -1,10 +1,5 @@
-import fs from 'fs/promises';
-import path from 'path';
-import process from 'process';
-import type { CacheEntry } from '../dto/cache.dto';
 import * as cheerio from 'cheerio';
 import { ParseRepository } from '../repositories/parse.repository';
-import type { AnyNode, Document, Element, ParentNode } from 'domhandler';
 
 export class ParseService {
     private parseRepository: ParseRepository;
@@ -27,18 +22,11 @@ export class ParseService {
         return nextPageUrl;
     };
 
-    public async extractRawRecords(baseUrl: string, parsedContent: cheerio.CheerioAPI) {
-
+    public getValidatedRecords(): any[] {
+        return this.parseRepository.getValidatedRecords();
     };
 
-
-
-
-
-
-
-
-
-
-
-}
+    public getErrorRecords(): any[] {
+        return this.parseRepository.getErrorRecords();
+    };
+};

@@ -2,10 +2,13 @@ import { RequestService } from './services/request.service';
 import { CacheService } from './services/cache.service';
 import { ParseService } from './services/parse.service';
 import { CheerioAPI } from 'cheerio';
+import { OutputService } from './services/output.service';
+
 
 async function main(url: string, stoppingAfterPages: number = 2) {
     const cacheService: CacheService = new CacheService();
     const parseService: ParseService = new ParseService();
+    const outputService = new OutputService();
     let nextPageUrl: string | null = url;
     let pageCount: number = 0;
     let htmlContent: string = "";
@@ -36,11 +39,18 @@ async function main(url: string, stoppingAfterPages: number = 2) {
     };
     /** CHECKPOINT — the script prints catalogue_pages=3 , discovered=60 , unique_urls=60 — and a second run
     reports the same numbers, mostly from cache. */
-    const stagetwoFinalReport: {} = {
+    const stageTwoFinalReport: {} = {
         catalogue_pages: pageCount,
         discovered: collectedAnalyticData.size,
         unique_urls: collectedAnalyticData.size
     };
-    console.log(stagetwoFinalReport);
+    console.log(stageTwoFinalReport);
+
+    // Write output files via OutputService
+    await outputService.writeResults(
+        parseService.getValidatedRecords(),
+        parseService.getErrorRecords()
+    );
 };
-main("https://books.toscrape.com/catalogue/page-1.html",);
+
+main("https://books.toscrape.com/catalogue/page-1.html", 2);

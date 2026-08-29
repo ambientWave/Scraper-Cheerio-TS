@@ -15,7 +15,8 @@
     "fs": "^0.0.1-security",
     "path": "^0.12.7",
     "process": "^0.11.10",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "zod": "^4.5.1"
   },
   "devDependencies": {
     "@types/node": "^26.4.0"

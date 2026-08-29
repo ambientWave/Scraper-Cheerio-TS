@@ -2,7 +2,6 @@ import fs from 'fs/promises';
 import path from 'path';
 import process from 'process';
 import type { CacheEntry } from '../dto/cache.dto';
-import { ParseRepository } from './parse.repository';
 import * as cheerio from 'cheerio';
 
 export class CacheRepository {
