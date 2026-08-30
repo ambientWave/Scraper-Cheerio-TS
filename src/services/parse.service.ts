@@ -34,7 +34,6 @@ export class ParseService {
     };
 
     public getNextPageUrl(baseUrl: string): string | null {
-        // make sure that page number is greater than the current page number
         const nextPageUrl: string | null = this.parseRepository.getNextPageUrl(baseUrl);
         return nextPageUrl;
     };
@@ -46,4 +45,8 @@ export class ParseService {
     public getErrorRecords(): any[] {
         return this.parseRepository.getErrorRecords();
     };
+
+    public addFetchError(url: string, error: string): void {
+        this.parseRepository.getErrorRecords().push({ record: { url }, error });
+    }
 };

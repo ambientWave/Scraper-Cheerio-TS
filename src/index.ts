@@ -1,4 +1,3 @@
-import { RequestService } from './services/request.service';
 import { CacheService } from './services/cache.service';
 import { ParseService } from './services/parse.service';
 import * as cheerio from 'cheerio';
@@ -12,13 +11,13 @@ import type { CatalogueRecord } from './dto/parse.dto';
 async function main(catalogueUrl: string, stoppingAfterPages: number = 2) {
     const cacheService: CacheService = new CacheService();
     const parseService: ParseService = new ParseService();
-    const outputService = new OutputService();
-    const reportService = new ReportService();
+    const outputService: OutputService = new OutputService();
+    const reportService: ReportService = new ReportService();
 
-    const startTime = new Date();
-    let pagesFetched = 0;
-    let cacheHits = 0;
-    let failedPages = 0;
+    const startTime: Date = new Date();
+    let pagesFetched: number = 0;
+    let cacheHits: number = 0;
+    let failedPages: number = 0;
 
     let nextPageUrl: string | null = catalogueUrl;
     let pageCount: number = 0;
@@ -72,6 +71,7 @@ async function main(catalogueUrl: string, stoppingAfterPages: number = 2) {
                 } catch (e) {
                     console.log(`Failed to fetch ${mutatedUrl}:`, e);
                     failedPages++;
+                    resourceCount++;
                     continue;
                 }
             }

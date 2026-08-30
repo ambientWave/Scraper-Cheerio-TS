@@ -11,7 +11,17 @@ export async function fetchAndCacheHtml(
     cacheService: CacheService
 ): Promise<string> {
     console.log("FETCH: Fetching from origin");
-    const res: Response = await RequestService.request(url);
+    let res: Response;
+    try {
+        res = await RequestService.request(url);
+    } catch (error: any) {
+        console.log(`Request failed for ${url}:`, error.message);
+        throw new Error(`Failed to fetch ${url}: ${error.message || 'unknown error'}`);
+    }
+    if (!res.ok) {
+        console.log(`Not caching error page: status ${res.status}`);
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
     const html: string = await res.text();
     console.log(`Page Size: ${Buffer.from(html).length}`);
     await cacheService.storeInCache(url, html);
