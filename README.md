@@ -1,7 +1,12 @@
-# Scraper
+# TypeScript HTML Scraper using Cheerio
+
+## Screenshots
+
+<img width="1888" height="961" alt="" src="https://github.com/user-attachments/assets/66f7fa47-1471-474a-88e0-40494319af79" />
 
 ## Target Classification
 
+* **Lane:** JavaScript and TypeScript
 * **Site:** books.toscrape.com
 * **Why:** This site is explicitly designed as a sandbox for web scraping practice and educational purposes.
 * **Data Collected:** Book titles, prices, and availability information.
@@ -11,7 +16,6 @@
 
 When requesting `https://books.toscrape.com/robots.txt`, no robots file was found (returned a 404 Not Found error).
 
-**I will not reuse this code on another site without checking its rules and terms first.**
 
 ## Run
 
@@ -20,8 +24,6 @@ npm install
 npx tsx src/index.ts
 ```
 
-* **Lane:** JavaScript and TypeScript
-* **Install:** Execute `npm install` in the project directory.
 
 ## Record Schema
 
@@ -72,6 +74,10 @@ The scraper only extracts data from static HTML. If the target site ever switche
 
 This assignment needed no browser because the data is already in the HTML the server sends, so a browser would only add cost.
 
-## Ethics Note
+## Ethics & Usage
 
-Use an official API when one exists; never bypass logins, paywalls, or blocks; collect only what you need.
+When using this code, please adhere to the following guidelines:
+* Use official APIs whenever available.
+* Respect site boundaries; do not bypass logins, paywalls, or blocks.
+* Practice data minimization by collecting only necessary information.
+* Always review a website's terms of service and robots.txt before applying this code to a new target.
