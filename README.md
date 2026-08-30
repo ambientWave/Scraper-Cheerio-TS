@@ -2,7 +2,8 @@
 
 ## Screenshots
 
-<img width="1888" height="961" alt="" src="https://github.com/user-attachments/assets/66f7fa47-1471-474a-88e0-40494319af79" />
+<img width="1806" height="840" alt="" src="https://github.com/user-attachments/assets/0c62904d-3ca0-496d-8e52-874e0c565eea" />
+
 
 ## Target Classification
 
